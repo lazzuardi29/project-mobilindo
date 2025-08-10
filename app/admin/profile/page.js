@@ -124,7 +124,7 @@ export default function AdminProfile() {
                 required
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="Masukkan username"
               />
             </div>
@@ -140,7 +140,7 @@ export default function AdminProfile() {
                 required
                 value={formData.admin_code}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="Masukkan kode admin"
               />
               <p className="mt-1 text-sm text-gray-500">

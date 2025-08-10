@@ -14,6 +14,8 @@ export default function AddCar() {
   const [loading, setLoading] = useState(false)
   const [admin, setAdmin] = useState(null)
   const router = useRouter()
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
 
   useEffect(() => {
     const adminData = localStorage.getItem('admin')
@@ -24,9 +26,43 @@ export default function AddCar() {
     setAdmin(JSON.parse(adminData))
   }, [router])
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    } else {
+      setImageFile(null);
+      setPreviewUrl('');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+
+    let image_url = '';
+
+    // Upload file jika ada
+    if (imageFile) {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+      const { data, error } = await supabase.storage
+        .from('cars')
+        .upload(fileName, imageFile);
+
+      if (error) {
+        alert('Gagal upload gambar: ' + error.message);
+        setLoading(false);
+        return;
+      }
+
+      // Dapatkan public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('cars')
+        .getPublicUrl(fileName);
+      image_url = publicUrlData.publicUrl;
+    }
 
     try {
       const { error } = await supabase
@@ -34,7 +70,7 @@ export default function AddCar() {
         .insert([{
           name: formData.name,
           price: parseFloat(formData.price),
-          image_url: formData.image_url
+          image_url: image_url
         }])
 
       if (error) throw error
@@ -120,7 +156,7 @@ export default function AddCar() {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="Contoh: Toyota Avanza"
               />
             </div>
@@ -136,27 +172,36 @@ export default function AddCar() {
                 required
                 value={formData.price}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="250000000"
               />
             </div>
 
             <div>
-              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700 mb-2">
-                URL Gambar
+              <label htmlFor="image_file" className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Gambar Mobil
               </label>
               <input
-                type="url"
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
+                type="file"
+                id="image_file"
+                name="image_file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
               <p className="mt-1 text-sm text-gray-500">
-                Masukkan URL gambar mobil dari Supabase Storage atau sumber eksternal
+                Pilih atau drag file gambar mobil (jpg/png, max 2MB)
               </p>
+              {previewUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500">Preview Gambar:</p>
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="mt-2 max-h-64 rounded-lg shadow"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end space-x-4">

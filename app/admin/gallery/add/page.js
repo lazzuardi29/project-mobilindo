@@ -10,6 +10,8 @@ export default function AddGallery() {
     description: '',
     image_url: ''
   })
+  const [imageFile, setImageFile] = useState(null)
+  const [previewUrl, setPreviewUrl] = useState(null)
   const [loading, setLoading] = useState(false)
   const [admin, setAdmin] = useState(null)
   const router = useRouter()
@@ -23,16 +25,46 @@ export default function AddGallery() {
     setAdmin(JSON.parse(adminData))
   }, [router])
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImageFile(file)
+      setPreviewUrl(URL.createObjectURL(file))
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
     try {
+      let uploadedImageUrl = formData.image_url
+
+      // Kalau ada file yang diupload
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop()
+        const fileName = `${Date.now()}.${fileExt}`
+        const filePath = `gallery/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('gallery') // ganti dengan nama bucket storage
+          .upload(filePath, imageFile)
+
+        if (uploadError) throw uploadError
+
+        const { data: publicUrlData } = supabase.storage
+          .from('gallery') // bucket name
+          .getPublicUrl(filePath)
+
+        uploadedImageUrl = publicUrlData.publicUrl
+      }
+
+      // Simpan ke tabel
       const { error } = await supabase
         .from('gallery')
         .insert([{
           description: formData.description,
-          image_url: formData.image_url
+          image_url: uploadedImageUrl
         }])
 
       if (error) throw error
@@ -64,94 +96,74 @@ export default function AddGallery() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-2">
-              <div className="relative">
-                <div className="w-12 h-8 relative">
-                  <div className="absolute top-2 left-4 w-6 h-3 bg-gradient-to-r from-gray-700 to-gray-900 rounded-t-lg"></div>
-                  <div className="absolute top-5 left-2 w-8 h-2 bg-red-600 rounded-full"></div>
-                  <div className="absolute top-1 left-8 w-1 h-1 bg-white rounded-full"></div>
-                </div>
-                <div className="absolute -bottom-2 left-1">
-                  <span className="text-2xl font-bold text-red-600 drop-shadow-sm">3N</span>
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold text-gray-800">MOBILINDO</span>
-                <div className="w-full h-0.5 bg-gradient-to-r from-gray-700 to-gray-900"></div>
-              </div>
+              <span className="text-xl font-bold text-gray-800">MOBILINDO</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Link
-                href="/admin/dashboard"
-                className="text-gray-700 hover:text-red-600 transition-colors"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/admin/gallery"
-                className="text-gray-700 hover:text-red-600 transition-colors"
-              >
-                Kelola Galeri
-              </Link>
+              <Link href="/admin/dashboard">Dashboard</Link>
+              <Link href="/admin/gallery">Kelola Galeri</Link>
             </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Tambah Foto Galeri</h1>
           <p className="text-gray-600">Tambahkan foto aktivitas baru ke galeri</p>
         </div>
 
-        {/* Form */}
         <div className="bg-white rounded-lg shadow p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Deskripsi Aktivitas
               </label>
               <textarea
-                id="description"
                 name="description"
                 required
                 rows={4}
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
-                placeholder="Deskripsikan aktivitas atau event yang ditunjukkan dalam foto"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg"
+                placeholder="Deskripsikan aktivitas atau event"
               />
             </div>
 
             <div>
-              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700 mb-2">
-                URL Gambar
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Gambar
               </label>
               <input
-                type="url"
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg"
               />
-              <p className="mt-1 text-sm text-gray-500">
-                Masukkan URL gambar aktivitas dari Supabase Storage atau sumber eksternal
-              </p>
+
+              {/* Preview Gambar */}
+              {previewUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500">Preview Gambar:</p>
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="mt-2 max-h-64 rounded-lg shadow"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end space-x-4">
               <Link
                 href="/admin/gallery"
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg"
               >
                 Batal
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-red-600 text-white rounded-lg"
               >
                 {loading ? 'Menyimpan...' : 'Simpan Foto'}
               </button>

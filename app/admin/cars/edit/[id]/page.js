@@ -13,6 +13,8 @@ export default function EditCar() {
   })
   const [loading, setLoading] = useState(false)
   const [admin, setAdmin] = useState(null)
+  const [imageFile, setImageFile] = useState(null)
+  const [previewUrl, setPreviewUrl] = useState('')
   const router = useRouter()
   const params = useParams()
 
@@ -41,9 +43,18 @@ export default function EditCar() {
         price: data.price || '',
         image_url: data.image_url || ''
       })
+      setPreviewUrl(data.image_url || '')
     } catch (error) {
       console.error('Error fetching car:', error)
       router.push('/admin/cars')
+    }
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImageFile(file)
+      setPreviewUrl(URL.createObjectURL(file))
     }
   }
 
@@ -51,13 +62,38 @@ export default function EditCar() {
     e.preventDefault()
     setLoading(true)
 
+    let image_url = formData.image_url
+
+    // Kalau ada file baru, upload ke Supabase
+    if (imageFile) {
+      const fileExt = imageFile.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('cars')
+        .upload(fileName, imageFile)
+
+      if (uploadError) {
+        alert('Gagal upload gambar: ' + uploadError.message)
+        setLoading(false)
+        return
+      }
+
+      // Dapatkan URL publik dari gambar yang baru diupload
+      const { data: publicUrlData } = supabase.storage
+        .from('cars')
+        .getPublicUrl(fileName)
+
+      image_url = publicUrlData.publicUrl
+    }
+
     try {
       const { error } = await supabase
         .from('cars')
         .update({
           name: formData.name,
           price: parseFloat(formData.price),
-          image_url: formData.image_url
+          image_url: image_url
         })
         .eq('id', params.id)
 
@@ -106,16 +142,10 @@ export default function EditCar() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Link
-                href="/admin/dashboard"
-                className="text-gray-700 hover:text-red-600 transition-colors"
-              >
+              <Link href="/admin/dashboard" className="text-gray-700 hover:text-red-600 transition-colors">
                 Dashboard
               </Link>
-              <Link
-                href="/admin/cars"
-                className="text-gray-700 hover:text-red-600 transition-colors"
-              >
+              <Link href="/admin/cars" className="text-gray-700 hover:text-red-600 transition-colors">
                 Kelola Mobil
               </Link>
             </div>
@@ -144,7 +174,7 @@ export default function EditCar() {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="Contoh: Toyota Avanza"
               />
             </div>
@@ -160,26 +190,35 @@ export default function EditCar() {
                 required
                 value={formData.price}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="250000000"
               />
             </div>
 
             <div>
-              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700 mb-2">
-                URL Gambar
+              <label htmlFor="image_file" className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Gambar Mobil
               </label>
               <input
-                type="url"
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
+                type="file"
+                id="image_file"
+                name="image_file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
+              {previewUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500">Preview Gambar:</p>
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="mt-2 max-h-64 rounded-lg shadow"
+                  />
+                </div>
+              )}
               <p className="mt-1 text-sm text-gray-500">
-                Masukkan URL gambar mobil dari Supabase Storage atau sumber eksternal
+                Pilih file gambar baru atau biarkan kosong untuk mempertahankan gambar lama
               </p>
             </div>
 

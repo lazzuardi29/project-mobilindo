@@ -81,27 +81,6 @@ export default async function Galeri() {
           </div>
         )}
 
-        {/* Contact CTA */}
-        <div className="mt-16 bg-gradient-to-r from-red-600 to-gray-800 rounded-lg p-8 text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">Ingin Mengikuti Event Kami?</h2>
-          <p className="text-lg mb-6">
-            Ikuti berbagai event menarik dan dapatkan informasi terbaru tentang koleksi mobil kami.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/kontak"
-              className="bg-white text-red-600 px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-300 font-semibold"
-            >
-              Hubungi Kami
-            </a>
-            <a
-              href="tel:+622112345678"
-              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-red-600 transition-colors duration-300 font-semibold"
-            >
-              +62 21 1234 5678
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   )

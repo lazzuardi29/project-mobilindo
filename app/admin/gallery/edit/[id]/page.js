@@ -12,6 +12,8 @@ export default function EditGallery() {
   })
   const [loading, setLoading] = useState(false)
   const [admin, setAdmin] = useState(null)
+  const [previewImage, setPreviewImage] = useState(null) // untuk review foto
+  const [imageFile, setImageFile] = useState(null) // file gambar yang diupload
   const router = useRouter()
   const params = useParams()
 
@@ -39,9 +41,18 @@ export default function EditGallery() {
         description: data.description || '',
         image_url: data.image_url || ''
       })
+      setPreviewImage(data.image_url || null)
     } catch (error) {
       console.error('Error fetching gallery item:', error)
       router.push('/admin/gallery')
+    }
+  }
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImageFile(file)
+      setPreviewImage(URL.createObjectURL(file)) // tampilkan preview
     }
   }
 
@@ -50,11 +61,33 @@ export default function EditGallery() {
     setLoading(true)
 
     try {
+      let imageUrl = formData.image_url
+
+      // jika ada gambar baru yang dipilih
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop()
+        const fileName = `${Date.now()}.${fileExt}`
+        const filePath = `gallery/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('gallery') // pastikan bucket "gallery" sudah ada di Supabase
+          .upload(filePath, imageFile)
+
+        if (uploadError) throw uploadError
+
+        // ambil public URL
+        const { data: publicUrlData } = supabase.storage
+          .from('gallery')
+          .getPublicUrl(filePath)
+
+        imageUrl = publicUrlData.publicUrl
+      }
+
       const { error } = await supabase
         .from('gallery')
         .update({
           description: formData.description,
-          image_url: formData.image_url
+          image_url: imageUrl
         })
         .eq('id', params.id)
 
@@ -103,16 +136,10 @@ export default function EditGallery() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Link
-                href="/admin/dashboard"
-                className="text-gray-700 hover:text-red-600 transition-colors"
-              >
+              <Link href="/admin/dashboard" className="text-gray-700 hover:text-red-600 transition-colors">
                 Dashboard
               </Link>
-              <Link
-                href="/admin/gallery"
-                className="text-gray-700 hover:text-red-600 transition-colors"
-              >
+              <Link href="/admin/gallery" className="text-gray-700 hover:text-red-600 transition-colors">
                 Kelola Galeri
               </Link>
             </div>
@@ -141,27 +168,28 @@ export default function EditGallery() {
                 rows={4}
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
                 placeholder="Deskripsikan aktivitas atau event yang ditunjukkan dalam foto"
               />
             </div>
 
             <div>
-              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700 mb-2">
-                URL Gambar
+              <label htmlFor="image_file" className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Gambar
               </label>
               <input
-                type="url"
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
+                type="file"
+                accept="image/*"
+                id="image_file"
+                onChange={handleImageChange}
+                className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg"
               />
-              <p className="mt-1 text-sm text-gray-500">
-                Masukkan URL gambar aktivitas dari Supabase Storage atau sumber eksternal
-              </p>
+              {previewImage && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-500 mb-2">Preview:</p>
+                  <img src={previewImage} alt="Preview" className="max-h-64 rounded-lg border" />
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end space-x-4">

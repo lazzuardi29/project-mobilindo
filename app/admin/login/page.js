@@ -95,7 +95,7 @@ export default function AdminLogin() {
                   required
                   value={credentials.username}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                  className="appearance-none text-gray-900 block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                   placeholder="Masukkan username"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function AdminLogin() {
                   required
                   value={credentials.admin_code}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                  className="appearance-none text-gray-900 block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                   placeholder="Masukkan kode admin"
                 />
               </div>

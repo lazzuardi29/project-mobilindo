@@ -99,20 +99,6 @@ export default function Kontak() {
                 </div>
               </div>
             </div>
-
-            {/* Map Placeholder */}
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Lokasi Kami</h3>
-              <div className="bg-gray-300 h-64 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <p className="text-gray-500">Peta Lokasi</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Contact Form */}
@@ -131,7 +117,7 @@ export default function Kontak() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="Masukkan nama lengkap Anda"
                 />
               </div>
@@ -148,7 +134,7 @@ export default function Kontak() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="contoh@email.com"
                   />
                 </div>
@@ -164,7 +150,7 @@ export default function Kontak() {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="08xxxxxxxxxx"
                   />
                 </div>
@@ -181,7 +167,7 @@ export default function Kontak() {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="Masukkan subjek pesan"
                 />
               </div>
@@ -197,7 +183,7 @@ export default function Kontak() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
+                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
                   placeholder="Tulis pesan Anda di sini..."
                 />
               </div>
