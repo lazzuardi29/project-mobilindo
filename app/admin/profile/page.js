@@ -49,6 +49,7 @@ export default function AdminProfile() {
       setAdmin(updatedAdmin)
 
       alert('Profil berhasil diupdate')
+      router.push('/admin/dashboard')
     } catch (error) {
       console.error('Error updating profile:', error)
       alert('Gagal mengupdate profil')

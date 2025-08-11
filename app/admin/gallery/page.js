@@ -38,21 +38,48 @@ export default function AdminGallery() {
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus item galeri ini?')) return
-
+    if (!confirm('Apakah Anda yakin ingin menghapus item galeri ini?')) return;
+  
     try {
+      // 1️⃣ Ambil URL gambar sebelum hapus row
+      const { data: galleryItem, error: fetchError } = await supabase
+        .from('gallery')
+        .select('image_url')
+        .eq('id', id)
+        .single();
+  
+      if (fetchError) throw fetchError;
+  
+      // 2️⃣ Hapus file di bucket 'gallery'
+      if (galleryItem?.image_url) {
+        const fileName = galleryItem.image_url.split('/').pop(); // ambil nama file saja
+        const { error: deleteFileError } = await supabase
+          .storage
+          .from('gallery')
+          .remove([fileName]);
+  
+        if (deleteFileError) {
+          console.error('Gagal menghapus file gambar:', deleteFileError);
+        }
+      }
+  
+      // 3️⃣ Hapus data galeri di tabel
       const { error } = await supabase
         .from('gallery')
         .delete()
-        .eq('id', id)
-
-      if (error) throw error
-      await fetchGallery()
+        .eq('id', id);
+  
+      if (error) throw error;
+  
+      // 4️⃣ Refresh data galeri
+      await fetchGallery();
+  
     } catch (error) {
-      console.error('Error deleting gallery item:', error)
-      alert('Gagal menghapus item galeri')
+      console.error('Error deleting gallery item:', error);
+      alert('Gagal menghapus item galeri');
     }
-  }
+  };
+  
 
   if (!admin) {
     return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>

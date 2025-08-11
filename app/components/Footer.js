@@ -33,10 +33,9 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-red-400">Kontak</h3>
             <div className="space-y-2 text-gray-300">
-              <p>Jl. Contoh No. 123</p>
-              <p>Jakarta, Indonesia</p>
+              <p>Jln. TB Hasan Kp. Cimesir Kel. Rangaksbitung Timur Kec. Rangaksbitung Kab. Lebak Prov. Banten</p>
               <p>Phone: +62 21 1234 5678</p>
-              <p>Email: info@3nmobilindo.com</p>
+              <p>Email: 3nmobilindo.official3n@gmail.com</p>
             </div>
           </div>
         </div>
@@ -45,7 +44,7 @@ export default function Footer() {
         <div className="border-t border-gray-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 3N MOBILINDO. All rights reserved.
+              © 2025 3N MOBILINDO. All rights reserved.
             </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-red-400 transition-colors">

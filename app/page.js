@@ -96,7 +96,7 @@ export default function Home() {
           <div className="text-center text-white px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-lg mx-auto py-6 sm:py-8 md:py-12">
             <div className="mb-3 sm:mb-4 md:mb-6">
               <img 
-                src="/images/logo.png" 
+                src="/images/logo3.png" 
                 alt="3N MOBILINDO Logo" 
                 className="w-20 h-10 sm:w-24 sm:h-12 md:w-32 md:h-16 mx-auto object-contain mb-2 sm:mb-3 md:mb-4"
               />
@@ -206,53 +206,71 @@ export default function Home() {
               Mengapa Memilih Kami?
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Berbagai keunggulan yang membuat kami menjadi pilihan terbaik untuk mobil Anda
+              Keunggulan yang membuat kami menjadi pilihan terbaik untuk mobil Anda
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            
+            {/* Bergaransi Resmi */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Kualitas Terjamin</h3>
-              <p className="text-gray-600">Semua mobil telah melalui inspeksi ketat untuk memastikan kualitas terbaik</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Bergaransi Resmi</h3>
+              <p className="text-gray-600">Dilengkapi garansi resmi untuk setiap pembelian mobil</p>
             </div>
-            
+
+            {/* Garansi Mesin 3 Bulan */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Harga Kompetitif</h3>
-              <p className="text-gray-600">Harga terbaik dengan berbagai pilihan pembayaran yang fleksibel</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Garansi Mesin 3 Bulan</h3>
+              <p className="text-gray-600">Perlindungan mesin selama 3 bulan setelah pembelian</p>
             </div>
-            
+
+            {/* Garansi Kaki-kaki & Kelistrikan 1 Tahun */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 17l6-6 4 4 8-8" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Pelayanan Prima</h3>
-              <p className="text-gray-600">Tim profesional siap membantu Anda menemukan mobil yang tepat</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Garansi Kaki-kaki & Kelistrikan 1 Tahun</h3>
+              <p className="text-gray-600">Perlindungan penuh kaki-kaki dan kelistrikan hingga 1 tahun</p>
             </div>
-            
+
+            {/* Gratis Oli Selama 1 Tahun */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v16h16V4H4zm4 4h8v8H8V8z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Garansi Lengkap</h3>
-              <p className="text-gray-600">Garansi resmi untuk memberikan ketenangan pikiran Anda</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Gratis Oli Selama 1 Tahun</h3>
+              <p className="text-gray-600">Servis gratis penggantian oli hingga 1 tahun penuh</p>
             </div>
+
+            {/* Free Angsuran Pertama */}
+            <div className="text-center">
+              <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Free Angsuran Pertama</h3>
+              <p className="text-gray-600">Nikmati kemudahan dengan gratis cicilan pertama</p>
+            </div>
+
           </div>
         </div>
       </section>
+
 
       {/* Gallery Section */}
       <section className="py-16 bg-white">

@@ -12,12 +12,35 @@ export default function Kontak() {
   })
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted:', formData)
-    alert('Terima kasih! Pesan Anda telah terkirim. Kami akan segera menghubungi Anda.')
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
-  }
+    e.preventDefault();
+  
+    // Format pesan
+    const textMessage = `
+    Halo, saya ${formData.name}.
+    Email: ${formData.email}
+    Nomor HP: ${formData.phone}
+    Subjek: ${formData.subject}
+    
+    Pesan:
+    ${formData.message}
+      `;
+    
+      // Encode untuk URL
+      const encodedMessage = encodeURIComponent(textMessage);
+    
+      // Nomor WA tujuan
+      const phoneNumber = "6285939531660"; // format internasional tanpa + dan tanpa 0
+    
+      // URL WhatsApp API
+      const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+      // Arahkan user ke WhatsApp
+      window.open(waUrl, "_blank");
+    
+      // Reset form setelah submit
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+  };
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -54,8 +77,7 @@ export default function Kontak() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold text-gray-900">Alamat</h3>
-                  <p className="text-gray-600">Jl. Contoh No. 123</p>
-                  <p className="text-gray-600">Jakarta Selatan, DKI Jakarta 12345</p>
+                  <p className="text-gray-600">Jln. TB Hasan Kp. Cimesir Kel. Rangaksbitung Timur Kec. Rangaksbitung Kab. Lebak Prov. Banten</p>
                 </div>
               </div>
 
@@ -80,8 +102,7 @@ export default function Kontak() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                  <p className="text-gray-600">info@3nmobilindo.com</p>
-                  <p className="text-gray-600">sales@3nmobilindo.com</p>
+                  <p className="text-gray-600">3nmobilindo.official3n@gmail.com</p>
                 </div>
               </div>
 

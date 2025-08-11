@@ -38,21 +38,48 @@ export default function AdminCars() {
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus mobil ini?')) return
-
+    if (!confirm('Apakah Anda yakin ingin menghapus mobil ini?')) return;
+  
     try {
+      // 1️⃣ Ambil data mobil untuk dapat image_url
+      const { data: carData, error: fetchError } = await supabase
+        .from('cars')
+        .select('image_url')
+        .eq('id', id)
+        .single();
+  
+      if (fetchError) throw fetchError;
+  
+      // 2️⃣ Hapus file gambar di storage
+      if (carData?.image_url) {
+        const fileName = carData.image_url.split('/').pop(); // ambil nama file saja
+        const { error: deleteFileError } = await supabase
+          .storage
+          .from('cars') // bucket name
+          .remove([fileName]);
+  
+        if (deleteFileError) {
+          console.error('Gagal menghapus file gambar:', deleteFileError);
+        }
+      }
+  
+      // 3️⃣ Hapus data mobil di tabel
       const { error } = await supabase
         .from('cars')
         .delete()
-        .eq('id', id)
-
-      if (error) throw error
-      await fetchCars()
+        .eq('id', id);
+  
+      if (error) throw error;
+  
+      // 4️⃣ Refresh data mobil
+      await fetchCars();
+  
     } catch (error) {
-      console.error('Error deleting car:', error)
-      alert('Gagal menghapus mobil')
+      console.error('Error deleting car:', error);
+      alert('Gagal menghapus mobil');
     }
-  }
+  };
+  
 
   if (!admin) {
     return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>

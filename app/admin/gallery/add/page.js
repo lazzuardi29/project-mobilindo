@@ -44,17 +44,17 @@ export default function AddGallery() {
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop()
         const fileName = `${Date.now()}.${fileExt}`
-        const filePath = `gallery/${fileName}`
+        //const filePath = `gallery/${fileName}`
 
         const { error: uploadError } = await supabase.storage
           .from('gallery') // ganti dengan nama bucket storage
-          .upload(filePath, imageFile)
+          .upload(fileName, imageFile)
 
         if (uploadError) throw uploadError
 
         const { data: publicUrlData } = supabase.storage
           .from('gallery') // bucket name
-          .getPublicUrl(filePath)
+          .getPublicUrl(fileName)
 
         uploadedImageUrl = publicUrlData.publicUrl
       }

@@ -57,50 +57,68 @@ export default function EditGallery() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-
+    e.preventDefault();
+    setLoading(true);
+  
     try {
-      let imageUrl = formData.image_url
-
+      let imageUrl = formData.image_url;
+  
       // jika ada gambar baru yang dipilih
       if (imageFile) {
-        const fileExt = imageFile.name.split('.').pop()
-        const fileName = `${Date.now()}.${fileExt}`
-        const filePath = `gallery/${fileName}`
-
+        // 1️⃣ Hapus file lama kalau ada
+        if (formData.image_url) {
+          const oldFilePath = formData.image_url.split('/').pop(); 
+          // Kalau file lama disimpan dalam folder "gallery", tambahkan:
+          // const oldFilePath = `gallery/${formData.image_url.split('/').pop()}`;
+  
+          const { error: deleteError } = await supabase.storage
+            .from('gallery')
+            .remove([oldFilePath]);
+  
+          if (deleteError) {
+            console.error('Gagal menghapus file lama:', deleteError);
+          }
+        }
+  
+        // 2️⃣ Upload file baru
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        //const filePath = `gallery/${fileName}`; // kalau mau pakai folder
+  
         const { error: uploadError } = await supabase.storage
-          .from('gallery') // pastikan bucket "gallery" sudah ada di Supabase
-          .upload(filePath, imageFile)
-
-        if (uploadError) throw uploadError
-
-        // ambil public URL
+          .from('gallery')
+          .upload(fileName, imageFile);
+  
+        if (uploadError) throw uploadError;
+  
+        // 3️⃣ Ambil public URL baru
         const { data: publicUrlData } = supabase.storage
           .from('gallery')
-          .getPublicUrl(filePath)
-
-        imageUrl = publicUrlData.publicUrl
+          .getPublicUrl(fileName);
+  
+        imageUrl = publicUrlData.publicUrl;
       }
-
+  
+      // 4️⃣ Update data di tabel
       const { error } = await supabase
         .from('gallery')
         .update({
           description: formData.description,
           image_url: imageUrl
         })
-        .eq('id', params.id)
-
-      if (error) throw error
-
-      router.push('/admin/gallery')
+        .eq('id', params.id);
+  
+      if (error) throw error;
+  
+      router.push('/admin/gallery');
     } catch (error) {
-      console.error('Error updating gallery item:', error)
-      alert('Gagal mengupdate item galeri')
+      console.error('Error updating gallery item:', error);
+      alert('Gagal mengupdate item galeri');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -186,10 +204,17 @@ export default function EditGallery() {
               />
               {previewImage && (
                 <div className="mt-4">
-                  <p className="text-sm text-gray-500 mb-2">Preview:</p>
-                  <img src={previewImage} alt="Preview" className="max-h-64 rounded-lg border" />
+                  <p className="text-sm text-gray-500">Preview Gambar:</p>
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="mt-2 max-h-64 rounded-lg shadow"
+                  />
                 </div>
               )}
+              <p className="mt-1 text-sm text-gray-500">
+                Pilih file gambar baru atau biarkan kosong untuk mempertahankan gambar lama
+              </p>
             </div>
 
             <div className="flex justify-end space-x-4">

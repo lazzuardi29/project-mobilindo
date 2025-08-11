@@ -59,34 +59,52 @@ export default function EditCar() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-
-    let image_url = formData.image_url
-
-    // Kalau ada file baru, upload ke Supabase
+    e.preventDefault();
+    setLoading(true);
+  
+    let image_url = formData.image_url;
+  
+    // Kalau ada file baru, hapus yang lama lalu upload baru
     if (imageFile) {
-      const fileExt = imageFile.name.split('.').pop()
-      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`
-
+      // 1️⃣ Hapus file lama kalau ada
+      if (formData.image_url) {
+        // Ambil nama file lama dari URL publik
+        const oldFileName = formData.image_url.split('/').pop();
+  
+        // Kalau file lama disimpan di folder "cars", tambahkan:
+        // const oldFilePath = `cars/${formData.image_url.split('/').pop()}`;
+  
+        const { error: deleteError } = await supabase.storage
+          .from('cars')
+          .remove([oldFileName]);
+  
+        if (deleteError) {
+          console.error('Gagal menghapus file lama:', deleteError);
+        }
+      }
+  
+      // 2️⃣ Upload file baru
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+  
       const { error: uploadError } = await supabase.storage
         .from('cars')
-        .upload(fileName, imageFile)
-
+        .upload(fileName, imageFile);
+  
       if (uploadError) {
-        alert('Gagal upload gambar: ' + uploadError.message)
-        setLoading(false)
-        return
+        alert('Gagal upload gambar: ' + uploadError.message);
+        setLoading(false);
+        return;
       }
-
-      // Dapatkan URL publik dari gambar yang baru diupload
+  
+      // 3️⃣ Dapatkan URL publik dari gambar yang baru diupload
       const { data: publicUrlData } = supabase.storage
         .from('cars')
-        .getPublicUrl(fileName)
-
-      image_url = publicUrlData.publicUrl
+        .getPublicUrl(fileName);
+  
+      image_url = publicUrlData.publicUrl;
     }
-
+  
     try {
       const { error } = await supabase
         .from('cars')
@@ -95,18 +113,19 @@ export default function EditCar() {
           price: parseFloat(formData.price),
           image_url: image_url
         })
-        .eq('id', params.id)
-
-      if (error) throw error
-
-      router.push('/admin/cars')
+        .eq('id', params.id);
+  
+      if (error) throw error;
+  
+      router.push('/admin/cars');
     } catch (error) {
-      console.error('Error updating car:', error)
-      alert('Gagal mengupdate mobil')
+      console.error('Error updating car:', error);
+      alert('Gagal mengupdate mobil');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+  
 
   const handleChange = (e) => {
     setFormData({

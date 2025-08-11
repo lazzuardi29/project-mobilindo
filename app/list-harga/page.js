@@ -95,12 +95,6 @@ export default async function ListHarga() {
             >
               Hubungi Kami
             </a>
-            <a
-              href="tel:+622112345678"
-              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-red-600 transition-colors duration-300 font-semibold"
-            >
-              +62 21 1234 5678
-            </a>
           </div>
         </div>
       </div>
