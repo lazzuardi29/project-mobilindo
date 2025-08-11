@@ -3,6 +3,10 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { RiOilLine } from "react-icons/ri";
+import { MdOutlineElectricCar } from "react-icons/md";
+import { PiEngine } from "react-icons/pi";
+import { MdOutlineMoneyOff } from "react-icons/md";
 
 export default function Home() {
   const [heroHeight, setHeroHeight] = useState('100vh')
@@ -121,7 +125,7 @@ export default function Home() {
             </p>
 
             <p className="text-xs sm:text-sm md:text-base mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-gray-300 max-w-md mx-auto leading-relaxed px-2 sm:px-0">
-              Temukan mobil impian Anda dengan kualitas terbaik dan harga kompetitif. Berbagai pilihan kendaraan dari brand ternama dunia.
+              Temukan mobil impian Anda dengan kualitas terbaik. Nikmati kemudahan pembayaran cash & kredit serta layanan tukar tambah mobil lama Anda dengan unit baru pilihan.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center px-4 sm:px-0">
@@ -235,9 +239,7 @@ export default function Home() {
             {/* Garansi Mesin 3 Bulan */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
-                </svg>
+                <PiEngine size={30} />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Garansi Mesin 3 Bulan</h3>
               <p className="text-gray-600">Perlindungan mesin selama 3 bulan setelah pembelian</p>
@@ -246,9 +248,7 @@ export default function Home() {
             {/* Garansi Kaki-kaki & Kelistrikan 1 Tahun */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 17l6-6 4 4 8-8" />
-                </svg>
+                <MdOutlineElectricCar size={30} />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Garansi Kaki-kaki & Kelistrikan 1 Tahun</h3>
               <p className="text-gray-600">Perlindungan penuh kaki-kaki dan kelistrikan hingga 1 tahun</p>
@@ -257,9 +257,7 @@ export default function Home() {
             {/* Gratis Oli Selama 1 Tahun */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v16h16V4H4zm4 4h8v8H8V8z" />
-                </svg>
+                <RiOilLine size={30}/>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Gratis Oli Selama 1 Tahun</h3>
               <p className="text-gray-600">Servis gratis penggantian oli hingga 1 tahun penuh</p>
@@ -268,9 +266,7 @@ export default function Home() {
             {/* Free Angsuran Pertama */}
             <div className="text-center">
               <div className="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1" />
-                </svg>
+                <MdOutlineMoneyOff size={30} />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Free Angsuran Pertama</h3>
               <p className="text-gray-600">Nikmati kemudahan dengan gratis cicilan pertama</p>
@@ -341,6 +337,11 @@ export default function Home() {
                 3N MOBILINDO hadir sebagai showroom mobil premium yang mengutamakan kualitas dan pelayanan. 
                 Kami berkomitmen untuk memberikan pengalaman terbaik kepada pelanggan dengan 
                 koleksi kendaraan berkualitas tinggi dan pelayanan profesional.
+              </p>
+              <p className="text-lg text-gray-600 mb-6">
+                Dengan opsi pembayaran cash maupun kredit, kami memberikan kemudahan dalam transaksi sesuai kebutuhan Anda. 
+                Selain itu, kami juga melayani program tukar tambah, 
+                sehingga Anda bisa mengganti mobil lama dengan mobil impian yang lebih sesuai.
               </p>
               <p className="text-lg text-gray-600 mb-6">
                 Dengan tim yang berpengalaman dan fasilitas modern, kami siap membantu Anda menemukan 

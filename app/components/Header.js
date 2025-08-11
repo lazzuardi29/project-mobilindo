@@ -46,7 +46,7 @@ export default function Header() {
               <img
                 src="/images/logo.png"
                 alt="3N MOBILINDO Logo"
-                className="w-18 h-10 object-contain rounded-lg"
+                className="w-26 h-10 object-contain rounded-lg"
               />
             </Link>
           </div>
