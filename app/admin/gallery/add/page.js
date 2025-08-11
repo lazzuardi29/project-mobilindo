@@ -15,6 +15,7 @@ export default function AddGallery() {
   const [loading, setLoading] = useState(false)
   const [admin, setAdmin] = useState(null)
   const router = useRouter()
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const adminData = localStorage.getItem('admin')
@@ -36,6 +37,18 @@ export default function AddGallery() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+
+    // Validasi semua field wajib diisi
+    if (
+      formData.description.trim() === "" ||
+      !imageFile
+    ) {
+      setErrorMessage("Harap isi semua field terlebih dahulu.");
+      setLoading(false)
+      return;
+    }
+
+    setErrorMessage(""); // reset error kalau valid
 
     try {
       let uploadedImageUrl = formData.image_url
@@ -147,6 +160,10 @@ export default function AddGallery() {
                     className="mt-2 max-h-64 rounded-lg shadow"
                   />
                 </div>
+              )}
+              {/* Pesan error jika form belum lengkap */}
+              {errorMessage && (
+                <p className="text-red-600 text-sm mt-2">{errorMessage}</p>
               )}
             </div>
 

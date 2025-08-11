@@ -92,29 +92,38 @@ export default function Home() {
         </div>
         
         {/* Right Side - Content (Full width on mobile) */}
-        <div className="h-full lg:h-full lg:w-1/2 flex items-center justify-center bg-black relative w-full">
-          <div className="text-center text-white px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-lg mx-auto py-6 sm:py-8 md:py-12">
+        <div className="relative lg:w-1/2 w-full flex items-center justify-center bg-black h-full">
+          {/* Background Image Container */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat block lg:hidden"
+            style={{
+              backgroundImage: "url('/images/hero.jpeg')",
+              opacity: 0.2,
+            }}
+          ></div>
+
+          {/* Content Container */}
+          <div className="relative text-center text-white px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-lg mx-auto py-6 sm:py-8 md:py-12">
             <div className="mb-3 sm:mb-4 md:mb-6">
-              <img 
-                src="/images/logo3.png" 
-                alt="3N MOBILINDO Logo" 
+              <img
+                src="/images/logo3.png"
+                alt="3N MOBILINDO Logo"
                 className="w-20 h-10 sm:w-24 sm:h-12 md:w-32 md:h-16 mx-auto object-contain mb-2 sm:mb-3 md:mb-4"
               />
             </div>
-            
+
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 leading-tight">
               <span className="text-red-400">3N</span> MOBILINDO
             </h1>
-            
+
             <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl mb-3 sm:mb-4 md:mb-6 text-gray-200 font-medium">
               Premium Car Showroom dengan Koleksi Kendaraan Terbaik
             </p>
-            
+
             <p className="text-xs sm:text-sm md:text-base mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-gray-300 max-w-md mx-auto leading-relaxed px-2 sm:px-0">
-              Temukan mobil impian Anda dengan kualitas terbaik dan harga kompetitif. 
-              Berbagai pilihan kendaraan dari brand ternama dunia.
+              Temukan mobil impian Anda dengan kualitas terbaik dan harga kompetitif. Berbagai pilihan kendaraan dari brand ternama dunia.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center px-4 sm:px-0">
               <Link 
                 href="/list-harga" 
@@ -329,9 +338,9 @@ export default function Home() {
                 Tentang 3N MOBILINDO
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                3N MOBILINDO adalah showroom mobil premium yang telah berpengalaman lebih dari 10 tahun 
-                dalam industri otomotif. Kami berkomitmen untuk memberikan pengalaman terbaik kepada 
-                pelanggan dengan koleksi kendaraan berkualitas tinggi dan pelayanan profesional.
+                3N MOBILINDO hadir sebagai showroom mobil premium yang mengutamakan kualitas dan pelayanan. 
+                Kami berkomitmen untuk memberikan pengalaman terbaik kepada pelanggan dengan 
+                koleksi kendaraan berkualitas tinggi dan pelayanan profesional.
               </p>
               <p className="text-lg text-gray-600 mb-6">
                 Dengan tim yang berpengalaman dan fasilitas modern, kami siap membantu Anda menemukan 

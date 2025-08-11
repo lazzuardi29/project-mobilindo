@@ -149,15 +149,6 @@ export default function AdminGallery() {
                 </div>
                 <div className="p-6">
                   <p className="text-gray-700 text-lg leading-relaxed mb-4">{item.description}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <span>
-                      {new Date(item.created_at).toLocaleDateString('id-ID', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
                   <div className="flex space-x-2">
                     <Link
                       href={`/admin/gallery/edit/${item.id}`}

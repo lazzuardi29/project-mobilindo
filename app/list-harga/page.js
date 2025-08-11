@@ -86,7 +86,7 @@ export default async function ListHarga() {
         <div className="mt-16 bg-gradient-to-r from-red-600 to-gray-800 rounded-lg p-8 text-white text-center">
           <h2 className="text-3xl font-bold mb-4">Butuh Bantuan?</h2>
           <p className="text-lg mb-6">
-            Tim sales kami siap membantu Anda menemukan mobil yang tepat sesuai kebutuhan dan budget.
+            Tim kami siap membantu Anda menemukan mobil yang tepat sesuai kebutuhan dan budget.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
