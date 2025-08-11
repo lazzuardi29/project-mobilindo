@@ -95,12 +95,9 @@ export default function AddGallery() {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-gray-800">MOBILINDO</span>
-            </div>
             <div className="flex items-center space-x-4">
-              <Link href="/admin/dashboard">Dashboard</Link>
-              <Link href="/admin/gallery">Kelola Galeri</Link>
+              <Link href="/admin/dashboard" className='text-gray-700 hover:text-red-600'>Dashboard</Link>
+              <Link href="/admin/gallery" className='text-gray-700 hover:text-red-600'>Kelola Galeri</Link>
             </div>
           </div>
         </div>

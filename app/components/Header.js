@@ -1,12 +1,33 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [admin, setAdmin] = useState(null)
+
+  useEffect(() => {
+    // Cek localStorage saat mount dan update state admin
+    const storedAdmin = localStorage.getItem('admin')
+    if (storedAdmin) setAdmin(JSON.parse(storedAdmin))
+
+    // Event listener untuk update admin state jika ada perubahan login/logout
+    const handleAdminChange = () => {
+      const adminData = localStorage.getItem('admin')
+      if (adminData) setAdmin(JSON.parse(adminData))
+      else setAdmin(null)
+    }
+
+    window.addEventListener('adminChange', handleAdminChange)
+
+    return () => {
+      window.removeEventListener('adminChange', handleAdminChange)
+    }
+  }, [])
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -22,10 +43,10 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3">
-              <img 
-                src="/images/logo.png" 
-                alt="3N MOBILINDO Logo" 
-                className="w-18 h-10 object-contain rounded-lg" 
+              <img
+                src="/images/logo.png"
+                alt="3N MOBILINDO Logo"
+                className="w-18 h-10 object-contain rounded-lg"
               />
             </Link>
           </div>
@@ -45,16 +66,50 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
-            {/* Admin Login Button */}
-            <Link
-              href="/admin/login"
-              className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
-              title="Admin Login"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </Link>
+
+            {/* Admin Button */}
+            {admin ? (
+              <button
+                onClick={() => router.push('/admin/dashboard')}
+                className="flex items-center justify-center px-3 py-2 rounded-md text-xs text-base font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-300"
+                title="Kelola Data"
+              >
+                <svg
+                  className="w-3 h-3 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                Kelola Data
+              </button>
+            ) : (
+              <Link
+                href="/admin/login"
+                className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
+                title="Admin Login"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </Link>
+            )}
           </nav>
 
           {/* Mobile menu button */}
@@ -63,11 +118,26 @@ export default function Header() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-red-600 focus:outline-none focus:text-red-600"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -92,17 +162,53 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
-              {/* Admin Login Button for Mobile */}
-              <Link
-                href="/admin/login"
-                className="flex items-center justify-center px-3 py-2 rounded-md text-base font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-                title="Admin Login"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </Link>
+
+              {admin ? (
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    router.push('/admin/dashboard')
+                  }}
+                  className="flex items-center justify-center px-3 py-2 rounded-md text-xs text-base font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-300"
+                  title="Kelola Data"
+                >
+                  <svg
+                    className="w-3 h-3 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                  Kelola Data
+                </button>
+              ) : (
+                <Link
+                  href="/admin/login"
+                  className="flex items-center justify-center px-3 py-2 rounded-md text-base font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                  title="Admin Login"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </Link>
+              )}
             </div>
           </div>
         )}

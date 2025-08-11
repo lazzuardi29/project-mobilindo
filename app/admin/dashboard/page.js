@@ -3,9 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 export default function AdminDashboard() {
   const [admin, setAdmin] = useState(null)
+  const [totalCars, setTotalCars] = useState(0)
+  const [totalGallery, setTotalGallery] = useState(0)
+  const [totalAdmins, setTotalAdmins] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
@@ -17,8 +21,43 @@ export default function AdminDashboard() {
     setAdmin(JSON.parse(adminData))
   }, [router])
 
+  useEffect(() => {
+    if (admin) {
+      fetchTotals()
+    }
+  }, [admin])
+
+  const fetchTotals = async () => {
+    try {
+      const { count: carsCount, error: carsError } = await supabase
+        .from('cars')
+        .select('*', { count: 'exact', head: true })
+      if (carsError) throw carsError
+      setTotalCars(carsCount || 0)
+
+      const { count: galleryCount, error: galleryError } = await supabase
+        .from('gallery')
+        .select('*', { count: 'exact', head: true })
+      if (galleryError) throw galleryError
+      setTotalGallery(galleryCount || 0)
+
+      const { count: adminsCount, error: adminsError } = await supabase
+        .from('admin')
+        .select('*', { count: 'exact', head: true })
+      if (adminsError) throw adminsError
+      setTotalAdmins(adminsCount || 0)
+
+    } catch (error) {
+      console.error('Error fetching counts:', error.message)
+    }
+  }
+
   const handleLogout = () => {
     localStorage.removeItem('admin')
+  
+    // dispatch event supaya Header tahu admin logout
+    window.dispatchEvent(new Event('adminChange'))
+  
     router.push('/admin/login')
   }
 
@@ -31,7 +70,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex justify-end items-center py-6">
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">Welcome, {admin.username}</span>
               <button
@@ -62,8 +101,19 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
             <div className="p-6">
               <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-lg mb-4">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                <svg
+                  className="w-6 h-6 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 13l1.5-4.5a2 2 0 012-1.5h11a2 2 0 012 1.5L21 13v6a1 1 0 01-1 1h-1a2 2 0 11-4 0H9a2 2 0 11-4 0H4a1 1 0 01-1-1v-6zM7 13h10"
+                  />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Kelola Mobil</h3>
@@ -128,14 +178,26 @@ export default function AdminDashboard() {
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
+                <svg
+                  className="w-4 h-4 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 13l1.5-4.5a2 2 0 012-1.5h11a2 2 0 012 1.5L21 13v6a1 1 0 01-1 1h-1a2 2 0 11-4 0H9a2 2 0 11-4 0H4a1 1 0 01-1-1v-6zM7 13h10"
+                  />
+                </svg>
+
                 </div>
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Total Mobil</p>
-                <p className="text-2xl font-semibold text-gray-900">0</p>
+                <p className="text-2xl font-semibold text-gray-900">{totalCars}</p>
               </div>
             </div>
           </div>
@@ -151,7 +213,7 @@ export default function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Total Galeri</p>
-                <p className="text-2xl font-semibold text-gray-900">0</p>
+                <p className="text-2xl font-semibold text-gray-900">{totalGallery}</p>
               </div>
             </div>
           </div>
@@ -167,7 +229,7 @@ export default function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Admin Aktif</p>
-                <p className="text-2xl font-semibold text-gray-900">1</p>
+                <p className="text-2xl font-semibold text-gray-900">{totalAdmins}</p>
               </div>
             </div>
           </div>

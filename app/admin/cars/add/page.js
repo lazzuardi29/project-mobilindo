@@ -101,22 +101,6 @@ export default function AddCar() {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <div className="w-12 h-8 relative">
-                  <div className="absolute top-2 left-4 w-6 h-3 bg-gradient-to-r from-gray-700 to-gray-900 rounded-t-lg"></div>
-                  <div className="absolute top-5 left-2 w-8 h-2 bg-red-600 rounded-full"></div>
-                  <div className="absolute top-1 left-8 w-1 h-1 bg-white rounded-full"></div>
-                </div>
-                <div className="absolute -bottom-2 left-1">
-                  <span className="text-2xl font-bold text-red-600 drop-shadow-sm">3N</span>
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold text-gray-800">MOBILINDO</span>
-                <div className="w-full h-0.5 bg-gradient-to-r from-gray-700 to-gray-900"></div>
-              </div>
-            </div>
             <div className="flex items-center space-x-4">
               <Link
                 href="/admin/dashboard"

@@ -30,6 +30,10 @@ export default function AdminLogin() {
 
       // Store admin data in localStorage
       localStorage.setItem('admin', JSON.stringify(data))
+
+      // dispatch custom event supaya Header update state
+      window.dispatchEvent(new Event('adminChange'))
+
       router.push('/admin/dashboard')
     } catch (error) {
       setError('Terjadi kesalahan saat login')

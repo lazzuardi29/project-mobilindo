@@ -21,6 +21,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        {/* Atau kalau pakai PNG */}
+        {/* <link rel="icon" type="image/png" href="/favicon.png" /> */}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -33,3 +39,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
