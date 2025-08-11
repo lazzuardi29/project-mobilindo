@@ -106,14 +106,14 @@ export default function AdminGallery() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Page Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4 sm:gap-0">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Kelola Galeri</h1>
             <p className="text-gray-600">Tambah, edit, dan hapus foto aktivitas galeri</p>
           </div>
           <Link
             href="/admin/gallery/add"
-            className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-300 font-semibold"
+            className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-300 font-semibold self-start sm:self-auto"
           >
             Tambah Foto
           </Link>
